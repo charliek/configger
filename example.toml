@@ -1,0 +1,40 @@
+# Optional:
+# Address to contact consul api at
+# Defaults to 127.0.0.1:8500
+address = "127.0.0.1:8500"
+
+# Optional:
+# This allows you to set a node to by down by placing a key with any value
+# under this path.  (e.g. /nodes/down/hostname )
+# By default key(s) will be looked at and this feature will be disabled.
+remove_with_kv = "/node/down"
+
+# Required:
+# The template to fill out. Absolute path or relative
+# to the directory containing this config file.
+src   = "example.conf.tmpl"
+
+# Required:
+# The destination location to fill out. Absolute path or relative
+# to the directory containing this config file.
+#dest  = "/etc/nginx/nginx.conf"
+dest  = "nginx.conf"
+
+# Optional:
+# The owner/group/mode of the destination files.
+# Defaults to root, root, 0664
+owner = "root"
+group = "root"
+mode  = "0644"
+
+# Optional:
+# The command to run to check the formatting of the destination file.
+# {{ .src }} will be expanded to a temporary directory, and the file
+# will only be overriden if this command returns a 0 status code.
+# By default no check will be done.
+check_cmd  = "/usr/sbin/nginx -t -c {{ .src }}"
+
+# Optional:
+# The command to run when the file as been updated.
+# By default no reload command will be issued will be done.
+reload_cmd = "/usr/sbin/service nginx restart"

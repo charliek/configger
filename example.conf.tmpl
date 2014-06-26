@@ -1,0 +1,12 @@
+
+upstream grails-blog {
+  {{range lookupService "grails-blog" }}
+    server {{.Node.Address}}:{{.Service.Port}};
+  {{end}}
+}
+
+upstream blog-service {
+  {{range lookupService "blog-service" }}
+    server {{.Node.Address}}:{{.Service.Port}};
+  {{end}}
+}
