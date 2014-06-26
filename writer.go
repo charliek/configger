@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"text/template"
 )
@@ -85,8 +86,10 @@ func (w *writer) WriteTemplate() error {
 			return err
 		}
 
-		// TODO write out proper file permissions
-		ioutil.WriteFile(path, bits, 0644)
+		ioutil.WriteFile(path, bits, w.config.FileMode)
+		os.Chmod(path, w.config.FileMode)
+		// TODO figure out how to chmod to proper user/group. Maybe shell out if needed.
+		// os.Chown(path, t.Uid, t.Gid)
 		log.Printf("Wrote out file %s", path)
 		w.reloadService()
 	}

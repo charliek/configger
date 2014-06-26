@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"syscall"
 	"time"
 )
@@ -46,6 +47,7 @@ func (c *Configger) loop() {
 
 type Config struct {
 	BasePath      string
+	FileMode      os.FileMode
 	Address       string `toml:"address"`
 	Src           string `toml:"src"`
 	Dest          string `toml:"dest"`
@@ -77,5 +79,12 @@ func loadConfigFile(basepath, path string) (Config, error) {
 		log.Printf("Error loading config file at path %s: %v", path)
 		return conf, err
 	}
+	mode, err := strconv.ParseUint(conf.Mode, 0, 32)
+	if err != nil {
+		log.Printf("Error when loading file mode of '%s': %v", conf.Mode, err)
+		return conf, err
+	}
+	conf.FileMode = os.FileMode(mode)
+
 	return conf, nil
 }
